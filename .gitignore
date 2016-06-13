@@ -9,5 +9,7 @@ ebin
 rel/example_project
 .concrete/DEV_MODE
 .rebar
+.idea
+*.iml
 
 # Created by .ignore support plugin (hsz.mobi)
