@@ -1,36 +1,48 @@
 %%%-------------------------------------------------------------------
-%%% @author Steven Livingstone-Perez
-%%% @copyright (C) 2015, Paramount Ventures
+%%% @author Vincent Labreche
+%%% @copyright (C) 2016, Equiis Technologies
 %%% @doc
 %%% This module will verify an incoming JWT token and confirm the username claim is present in the request.
-%%% - Ensure you store your symmetric key in the "secret" key/value pair ejabberd_auth_jwt.app setting.
-%%% - HS256 support only at the moment.
+%%% - Store your key in the "secret" key/value pair ejabberd_auth_jwt.app setting.
+%%% - HS256/RS256 support
 %%% - The user_id is the only required claim and must match the username passed into eJabberd.
 %%% - Optionally, pass a "Host" claim and it will check the eJabberd server name for equality.
 %%% @end
-%%% Created : 16. Dec 2015 17:39
 %%%-------------------------------------------------------------------
+
 -module(ejabberd_auth_jwt).
--author('Steven Livingstone-Perez').
+-author('Vincent Labreche <vlabreche@equiis.com').
 
 -behaviour(ejabberd_auth).
-
 -behaviour(ejabberd_config).
 
 %% API
--export([start/1,
+-export([
+  start/1,
+  start/2,
   store_type/0,
   plain_password_required/0,
   check_password/3,
   is_user_exists/2,
   stop/1]).
 
--include("ejabberd.hrl").
--include("logger.hrl").
+-include_lib("ejabberd.hrl").
+-include_lib("logger.hrl").
+
+-define(PROCNAME, ejabberd_auth_jwt).
 
 %% Implementation
--spec start(binary()) -> ok.
+
 start(_Host) ->
+  ?INFO_MSG("JWT auth started", []),
+  ok.
+
+start(_Host, _Opts) ->
+  ?INFO_MSG("JWT auth started", []),
+  ok.
+
+stop(_Host) ->
+  ?INFO_MSG("JWT auth stopped", []),
   ok.
 
 % Needed so that the check_password/3 is called.
@@ -85,6 +97,3 @@ check_password(LUser, LServer, Token) ->
           end
       end
   end.
-
-stop(_Host) ->
-  ok.

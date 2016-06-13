@@ -2,11 +2,12 @@
   [
     {id, "EjabberJwtAuth"},
     {description, "Equiis Ejabberd JWT validator"},
-    {vsn, "0.0.1"},
+    {vsn, git},
   {registered, []},
   {applications, [
     kernel,
     stdlib,
+    ejabberd,
     ejwt
     ]},
   {mod, { ejabberd_auth_jwt_app, []}},

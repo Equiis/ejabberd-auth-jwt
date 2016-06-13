@@ -11,5 +11,6 @@ rel/example_project
 .rebar
 .idea
 *.iml
+_build
 
 # Created by .ignore support plugin (hsz.mobi)
