@@ -81,8 +81,12 @@ check_password(LUser, _AuthzId, LServer, Token) ->
   error_logger:info_msg(io_lib:format("Unwrapping token ~s for User ~s at ~s", [Token, LUser, LServer])),
 
   % shared key data
-  application:load(ejabberd_auth_jwt),
-  {_, Key} = application:get_env(ejabberd_auth_jwt, secret),
+  %application:load(ejabberd_auth_jwt),
+  %{_, Key} = application:get_env(ejabberd_auth_jwt, secret),
+
+  Key = ejabberd_config:get_option(jwt_public_key,
+    fun iolist_to_list/1,
+    ""),
 
   % Get the asserted user id
   ParsedClaims = ejwt:parse_jwt(Token, Key),
@@ -119,6 +123,9 @@ check_password(LUser, _AuthzId, LServer, Token) ->
       end
   end.
 
+iolist_to_list(IOList) ->
+  binary_to_list(iolist_to_binary(IOList)).
+
 dirty_get_registered_users() ->
   [].
 
@@ -152,5 +159,8 @@ set_password(_User, _Server, _Password) ->
 try_register(_User, _Server, _Password) ->
   {error, not_allowed}.
 
+opt_type(jwt_public_key) ->
+  fun iolist_to_list/1;
+
 opt_type(_) ->
-  [].
+  [jwt_public_key].
