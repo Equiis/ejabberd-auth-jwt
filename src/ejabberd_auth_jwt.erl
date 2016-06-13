@@ -22,9 +22,22 @@
   start/2,
   store_type/0,
   plain_password_required/0,
-  check_password/3,
+  check_password/4,
+  check_password/6,
   is_user_exists/2,
-  stop/1]).
+  stop/1,
+  dirty_get_registered_users/0,
+  get_password/2,
+  get_password_s/2,
+  get_vh_registered_users/1,
+  get_vh_registered_users/2,
+  get_vh_registered_users_number/1,
+  get_vh_registered_users_number/2,
+  remove_user/2,
+  remove_user/3,
+  set_password/3,
+  try_register/3,
+  opt_type/1]).
 
 -include_lib("ejabberd.hrl").
 -include_lib("logger.hrl").
@@ -55,8 +68,16 @@ is_user_exists(User, _Server) ->
   error_logger:info_msg(User),
   true.
 
--spec check_password(ejabberd:luser(), ejabberd:lserver(), binary()) -> boolean().
-check_password(LUser, LServer, Token) ->
+
+-spec check_password(binary(), binary(), binary(), binary(), binary(),
+    fun((binary()) -> binary())) -> boolean().
+check_password(User, _AuthzId, Server, Password, _Digest,
+    _DigestGen) ->
+  check_password(User, _AuthzId, Server, Password).
+
+
+-spec check_password(ejabberd:luser(), binary(), ejabberd:lserver(), binary()) -> boolean().
+check_password(LUser, _AuthzId, LServer, Token) ->
   error_logger:info_msg(io_lib:format("Unwrapping token ~s for User ~s at ~s", [Token, LUser, LServer])),
 
   % shared key data
@@ -97,3 +118,39 @@ check_password(LUser, LServer, Token) ->
           end
       end
   end.
+
+dirty_get_registered_users() ->
+  [].
+
+get_password(_User, _Server) ->
+  false.
+
+get_password_s(_User, _Server) ->
+  false.
+
+get_vh_registered_users(_Server) ->
+  [].
+
+get_vh_registered_users(_Server, _Data) ->
+  [].
+
+get_vh_registered_users_number(_Server) ->
+  0.
+
+get_vh_registered_users_number(_Server, _Data) ->
+  0.
+
+remove_user(_User, _Server) ->
+  {error, not_allowed}.
+
+remove_user(_User, _Server, _Password) ->
+  not_allowed.
+
+set_password(_User, _Server, _Password) ->
+  {error, unknown_problem}.
+
+try_register(_User, _Server, _Password) ->
+  {error, not_allowed}.
+
+opt_type(_) ->
+  [].
