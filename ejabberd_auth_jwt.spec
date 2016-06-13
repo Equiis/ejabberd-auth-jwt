@@ -1,5 +1,5 @@
-author: "Steven Livingstone-Perez <steven at livz.org>"
+author: "Vincent Labreche <vlabreche@equiis.com>"
 category: "auth"
 summary: "Authentication via a JWT Token"
-home: "https://github.com/ParamountVentures/ejabberd-auth-jwt"
-url: "git@github.com:ParamountVentures/ejabberd-auth-jwt.git"
+home: "https://github.com/equiis/ejabberd-auth-jwt"
+url: "git@github.com:Equiis/ejabberd-auth-jwt.git"

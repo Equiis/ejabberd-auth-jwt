@@ -1,7 +1,7 @@
 {application, ejabberd_auth_jwt,
   [
-    {id, "My Id"},
-    {description, ""},
+    {id, "EjabberJwtAuth"},
+    {description, "Equiis Ejabberd JWT validator"},
     {vsn, "0.0.1"},
   {registered, []},
   {applications, [
