@@ -88,10 +88,29 @@ check_password(LUser, _AuthzId, LServer, Token) ->
     fun iolist_to_binary/1,
     ""),
 
+  error_logger:info_msg(io_lib:format("Public key is: ~s", [RawKey])),
+
+  K = ["-----BEGIN PUBLIC KEY-----\n"
+  "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9SlPEc6yszAM4NzJK0mf\n",
+  "Yo4EMvdSEGCgD4oTxX9nr/KSQteU4wx3Pj3MNAvUMmdd5EM3G01jsVVeoypV6Eis\n",
+  "M0PmIgtN5KWexSTFteVP9Hb86/pdqAM3oOhhKKS3uOw0cxZyYGzv6MHoR7ZA9UN+\n",
+  "b+XwFzY21f8G0wbYoGarKsJ8S8n1cF8OtL0dNKhjyWTalVVZR7PoK7EviUrwIZ6o\n",
+  "0dYJxxwf9nHddJwfh5IRKfAOcKqt4usN0Utpzl9fOmykce6m7LXpd1Vu+tA4xudP\n",
+  "5O1R2hZus2c0coGk7XZywFTUv7K+M4lpTTJtjUEX6fkK8y/LuCg+PUKakjyP+LAE\n",
+  "LQIDAQAB\n",
+  "-----END PUBLIC KEY-----"],
+
+  RawKey = iolist_to_binary(K),
+  error_logger:info_msg(io_lib:format("Public rawkey is: ~s", [RawKey])),
+
   [Key] = public_key:pem_decode(RawKey),
+  error_logger:info_msg(io_lib:format("Public decoded key is: ~s", [Key])),
+
+  DecodedKey = public_key:pem_entry_decode(Key),
+  error_logger:info_msg(io_lib:format("Public entry decoded key is: ~s", [DecodedKey])),
 
   % Get the asserted user id
-  ParsedClaims = ejwt:parse_jwt(Token, Key),
+  ParsedClaims = ejwt:parse_jwt(Token, DecodedKey),
 
   case ParsedClaims of
     invalid ->
