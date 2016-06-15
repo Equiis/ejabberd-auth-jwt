@@ -84,9 +84,11 @@ check_password(LUser, _AuthzId, LServer, Token) ->
   %application:load(ejabberd_auth_jwt),
   %{_, Key} = application:get_env(ejabberd_auth_jwt, secret),
 
-  Key = ejabberd_config:get_option(jwt_public_key,
+  RawKey = ejabberd_config:get_option(jwt_public_key,
     fun iolist_to_binary/1,
     ""),
+
+  [Key] = public_key:pem_decode(RawKey),
 
   % Get the asserted user id
   ParsedClaims = ejwt:parse_jwt(Token, Key),
