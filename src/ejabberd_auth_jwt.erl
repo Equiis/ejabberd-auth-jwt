@@ -85,7 +85,7 @@ check_password(LUser, _AuthzId, LServer, Token) ->
   %{_, Key} = application:get_env(ejabberd_auth_jwt, secret),
 
   Key = ejabberd_config:get_option(jwt_public_key,
-    fun iolist_to_list/1,
+    fun iolist_to_binary/1,
     ""),
 
   % Get the asserted user id
@@ -123,9 +123,6 @@ check_password(LUser, _AuthzId, LServer, Token) ->
       end
   end.
 
-iolist_to_list(IOList) ->
-  binary_to_list(iolist_to_binary(IOList)).
-
 dirty_get_registered_users() ->
   [].
 
@@ -160,7 +157,7 @@ try_register(_User, _Server, _Password) ->
   {error, not_allowed}.
 
 opt_type(jwt_public_key) ->
-  fun iolist_to_list/1;
+  fun iolist_to_binary/1;
 
 opt_type(_) ->
   [jwt_public_key].
