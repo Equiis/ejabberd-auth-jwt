@@ -8,7 +8,12 @@
     kernel,
     stdlib,
     ejabberd,
-    ejwt
+    ejwt,
+    crypto,
+    jsx,
+    base64url,
+    public_key,
+    ssl
     ]},
   {mod, { ejabberd_auth_jwt_app, []}},
   {env, [
